@@ -113,13 +113,15 @@ const App = () => {
 
         <div className="controls">
           <div className="h-full">
-            {url && (
+            {url ? (
               <>
                 <p>Scan to open controls</p>
                 <p>on mobile with haptics</p>
-                <p className="text-center">Or</p>
               </>
+            ) : (
+              <p>Loading Controls for Phone..</p>
             )}
+            <p className="text-center">Or</p>
             <p>press W A S D to move</p>
             <p>press K to swap camera</p>
             <p>press R to reset</p>
@@ -134,13 +136,19 @@ const App = () => {
           <p>Credits-</p>
           <p>
             Game Tutorial :
-            <a  className="underline" href="https://youtu.be/wHw3Gh0IhNc?si=pxobg3M4ZwSve9V1">
+            <a
+              className="underline"
+              href="https://youtu.be/wHw3Gh0IhNc?si=pxobg3M4ZwSve9V1"
+            >
               Irradiance
             </a>
           </p>
           <p>
             Air-Console Integration :
-            <a className="underline" href="https://github.com/Prasad-Katkade/React-ThreeJS-Air-Console">
+            <a
+              className="underline"
+              href="https://github.com/Prasad-Katkade/React-ThreeJS-Air-Console"
+            >
               Prasad's Github
             </a>
           </p>

@@ -23,6 +23,17 @@ body, html, #root {
   row-gap: 10px;
 }
 
+.credits {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  background: black;
+  opacity: 0.5;
+  color: white;
+  padding: 5px;
+  row-gap: 10px;
+}
+
 p {
   margin: 5px;
   font-family: monospace;

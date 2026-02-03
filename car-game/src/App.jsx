@@ -1,6 +1,6 @@
 import { Physics } from "@react-three/cannon";
 import { Canvas } from "@react-three/fiber";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Scene } from "./Scene";
 import MobileControls from "./MobileControl";
 import ControllerContext from "./ControlContext";
@@ -13,8 +13,8 @@ const App = () => {
   const right = useRef(false);
   const wsRef = useRef(null);
   const [url, setUrl] = useState(null);
-  const BE_URL = "192.168.86.219:8080";
-  const FE_URL = "http://192.168.86.219:3000/";
+  const BE_URL = "react-threejs-air-console.onrender.com";
+  const FE_URL = "https://react-air-console.netlify.app/";
 
   const setCollisionDetected = (val) => {
     sendJoystickState(
@@ -41,13 +41,13 @@ const App = () => {
     async function init() {
       let roomCode = window.location.pathname.replace("/", "");
       if ((!roomCode || roomCode.length !== 5) && !isMobile) {
-        const res = await fetch(`http://${BE_URL}/create-room`);
+        const res = await fetch(`https://${BE_URL}/create-room`);
         const data = await res.json();
         roomCode = data.room;
         window.history.pushState({}, "", `/${roomCode}`);
       }
       if (!roomCode) return;
-      const ws = new WebSocket(`ws://${BE_URL}/${roomCode}`);
+      const ws = new WebSocket(`wss://${BE_URL}/${roomCode}`);
       setUrl(`${FE_URL}${roomCode}`);
       wsRef.current = ws;
 
@@ -60,7 +60,7 @@ const App = () => {
           backward.current = s.backward;
           left.current = s.left;
           right.current = s.right;
-          if (s.collision) {
+          if (s.collision && isMobile) {
             window.navigator.vibrate([500]);
           }
         }
@@ -108,19 +108,42 @@ const App = () => {
             <Physics broadphase="SAP" gravity={[0, -2.6, 0]}>
               <Scene />
             </Physics>
-          </Canvas>{" "}
+          </Canvas>
         </ControllerContext.Provider>
 
-        <div class="controls">
+        <div className="controls">
           <div className="h-full">
-            <p>press w a s d to move</p>
-            <p>press k to swap camera</p>
-            <p>press r to reset</p>
-            <p>press arrows for flips</p>
+            {url && (
+              <>
+                <p>Scan to open controls</p>
+                <p>on mobile with haptics</p>
+                <p className="text-center">Or</p>
+              </>
+            )}
+            <p>press W A S D to move</p>
+            <p>press K to swap camera</p>
+            <p>press R to reset</p>
           </div>
-          <div className="h-full bg-red-50">
-            <QRCodeSVG value={url} marginSize={5} />
-          </div>
+          {url && (
+            <div className="h-full bg-red-50 ml-1 flex flex-col items-center justify-center">
+              <QRCodeSVG value={url} marginSize={5} />
+            </div>
+          )}
+        </div>
+        <div className="credits">
+          <p>Credits-</p>
+          <p>
+            Game Tutorial :
+            <a  className="underline" href="https://youtu.be/wHw3Gh0IhNc?si=pxobg3M4ZwSve9V1">
+              Irradiance
+            </a>
+          </p>
+          <p>
+            Air-Console Integration :
+            <a className="underline" href="https://github.com/Prasad-Katkade/React-ThreeJS-Air-Console">
+              Prasad's Github
+            </a>
+          </p>
         </div>
       </div>
 
